@@ -2,6 +2,8 @@ const createHttpError = require('http-errors')
 const { User } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
+const {ErrorObject} = require('../helpers/error.js')
+const bcrypt = require('bcryptjs')
 
 // example of a controller. First call the service, then build the controller method
 module.exports = {
@@ -21,4 +23,38 @@ module.exports = {
       next(httpError)
     }
   }),
+  create: catchAsync(async(req,res,next)=>{
+    try {
+      const {firstName,lastName,email,password,avatar,roleId,deletedAt} = req.body
+      const hashPasword = bcrypt.hashSync(password,8)
+      const [user,created] = await User.findOrCreate({
+        where: {email},
+        defaults: {
+          firstName,
+          lastName,
+          email,
+          password:hashPasword,
+          avatar,
+          roleId,
+          deletedAt,
+        }});
+      //verificar si ya existe el usuario
+      if(!created){
+        const error = new ErrorObject("Email already exist", 400)
+        throw error
+      }else{
+        endpointResponse({
+          res,
+          message: 'User created successfully',
+          body:user
+        })
+      } 
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving users] - [index - POST]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  })
 }
