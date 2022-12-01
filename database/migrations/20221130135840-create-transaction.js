@@ -18,23 +18,39 @@ module.exports = {
         allowNull: false,
         type: Sequelize.FLOAT,
       },
-      userId:{
+      userId: {
         type: Sequelize.INTEGER,
+        references:{
+          model:{
+            tableName:"users",
+          
+          },
+          key:"id",
+        },
+        allowNull:false,
       },
+      
       categoryId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+         references:{
+          model:{
+            tableName:"categories",
+          
+          },
+          key:"id",
+        },
+        allowNull:false,
+        
       },
-      date:{
-      type: Sequelize.DATE,
-      allowNull: false
+      date: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
-      deleteAt:{
+      deleteAt: {
         type: Sequelize.DATE,
       }
-      
 
 
-    
     });
   },
   down: async (queryInterface, Sequelize) => {
