@@ -5,6 +5,8 @@ const { catchAsync } = require('../helpers/catchAsync')
 const {ErrorObject} = require('../helpers/error.js')
 const bcrypt = require('bcryptjs')
 
+const {generateJwt} = require('../helpers/generate-JWT.js')
+
 // example of a controller. First call the service, then build the controller method
 module.exports = {
   get: catchAsync(async (req, res, next) => {
@@ -43,10 +45,12 @@ module.exports = {
         const error = new ErrorObject("Email already exist", 400)
         throw error
       }else{
+        const token = await generateJwt(user.id)
+        console.log("token: ", token)
         endpointResponse({
           res,
           message: 'User created successfully',
-          body:user
+          body:{user, token}
         })
       } 
     } catch (error) {
