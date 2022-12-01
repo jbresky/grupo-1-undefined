@@ -20,44 +20,46 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
-        references:{
-          model:{
-            tableName:"users",
-          
+        references: {
+          model: {
+            tableName: "users",
+
           },
-          key:"id",
+          key: "id",
         },
-        allowNull:false,
+        allowNull: false,
       },
-      
+
       categoryId: {
         type: Sequelize.INTEGER,
-         references:{
-          model:{
-            tableName:"categories",
-          
+        references: {
+          model: {
+            tableName: "categories",
+
           },
-          key:"id",
+          key: "id",
         },
-        allowNull:false,
-        
+        allowNull: false,
+
       },
       date: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      deleteAt: {
+      deletedAt: {
         type: Sequelize.DATE,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
-
-
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('transactions');
   }
 };
-
-
-
-
