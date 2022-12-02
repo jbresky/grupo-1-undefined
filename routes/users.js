@@ -11,7 +11,5 @@ router.post('/', create)
 
 router.get('/:id', getId)
 
-router.get('/:id', getId)
-
 
 module.exports = router
