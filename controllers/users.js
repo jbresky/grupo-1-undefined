@@ -1,12 +1,12 @@
-
 const createHttpError = require("http-errors");
 const { User } = require("../database/models");
 const { endpointResponse } = require("../helpers/success");
 const { catchAsync } = require("../helpers/catchAsync");
 const { ErrorObject } = require("../helpers/error.js");
 const bcrypt = require("bcryptjs");
-
 const { generateJwt } = require("../helpers/generate-JWT.js");
+
+
 
 // example of a controller. First call the service, then build the controller method
 module.exports = {
@@ -59,7 +59,10 @@ module.exports = {
         deletedAt,
       } = req.body;
       const hashPasword = bcrypt.hashSync(password, 8);
+
+
       
+
       const [user, created] = await User.findOrCreate({
         where: { email },
         defaults: {
