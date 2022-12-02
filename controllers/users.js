@@ -30,11 +30,15 @@ module.exports = {
     const { id } = req.params
     try {
       const response = await User.findByPk(id)
-      endpointResponse({
-        res,
-        message: 'User retrieved successfully',
-        body: response,
-      })
+      if (response) {
+        endpointResponse({
+          res,
+          message: 'User retrieved successfully',
+          body: response,
+        })
+      } else {
+        throw new ErrorObject("Can't find the user you're looking for", 400);
+      }
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
