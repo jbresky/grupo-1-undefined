@@ -13,7 +13,7 @@ const router = express.Router()
 
 router.get('/', get)
 router.post('/', schemaValidator(registration), create)
-router.put('/:id', editUser)
+router.put('/:id',schemaValidator(registration), editUser)
 router.get('/:id', getId)
 
 
