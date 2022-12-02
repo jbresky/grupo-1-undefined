@@ -20,6 +20,10 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING
       },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       roleId: {
         type: Sequelize.INTEGER,
         references:{
@@ -33,6 +37,10 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt: {
+        allowNull:true,
         type: Sequelize.DATE
       }
     });
