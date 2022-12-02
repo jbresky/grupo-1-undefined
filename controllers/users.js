@@ -6,7 +6,7 @@ const { ErrorObject } = require("../helpers/error.js");
 const bcrypt = require("bcryptjs");
 
 const { generateJwt } = require("../helpers/generate-JWT.js");
-const { use } = require("chai");
+
 
 // example of a controller. First call the service, then build the controller method
 module.exports = {
