@@ -33,7 +33,10 @@ exports.registration = {
         },
     },
     email: {
-        normalizeEmail: true,
-        errorMessage: "Please provide a valid email"
+        isEmail:{
+            
+            errorMessage: "Please provide a valid email"
+        },
+        // normalizeEmail: true,
     },
 };
