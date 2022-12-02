@@ -74,7 +74,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const user = await User.findByPk(id);
-      if (user === null) throw new ErrorObject("user does not exist", 400);
+      if (user === null) throw new ErrorObject("user does not exist", 404);
       const {
         firstName,
         lastName,
