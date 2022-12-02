@@ -95,42 +95,44 @@ module.exports = {
       // res.status(error.statusCode).send(error.message)
     }
   }),
-  editUser: async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const user = await User.findByPk(id);
-      if (user === null) throw new ErrorObject("user does not exist", 404);
-      const {
-        firstName,
-        lastName,
-        email,
-        password,
-        avatar,
-        roleId,
-        deletedAt,
-      } = req.body;
-      user.set({
-        firstName,
-        lastName,
-        email,
-        password: bcrypt.hashSync(password, 8),
-        avatar,
-        roleId,
-        deletedAt,
-      });
-      const response = await user.save();
-      endpointResponse({
-        res,
-        message: `${response.email} updated succesfully`,
-        body: response,
-      });
-      
-    } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        `[Error retrieving users] - [index - PUT]: ${error.message}`
-      );
-      next(httpError);
+  editUser:catchAsync(
+    async (req, res, next) => {
+      try {
+        const { id } = req.params;
+        const user = await User.findByPk(id);
+        if (user === null) throw new ErrorObject("user does not exist", 404);
+        const {
+          firstName,
+          lastName,
+          email,
+          password,
+          avatar,
+          roleId,
+          deletedAt,
+        } = req.body;
+        user.set({
+          firstName,
+          lastName,
+          email,
+          password: bcrypt.hashSync(password, 8),
+          avatar,
+          roleId,
+          deletedAt,
+        });
+        const response = await user.save();
+        endpointResponse({
+          res,
+          message: `${response.email} updated succesfully`,
+          body: response,
+        });
+        
+      } catch (error) {
+        const httpError = createHttpError(
+          error.statusCode,
+          `[Error retrieving users] - [index - PUT]: ${error.message}`
+        );
+        next(httpError);
+      }
     }
-  },
+  ) 
 };
