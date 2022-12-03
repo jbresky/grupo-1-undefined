@@ -55,7 +55,7 @@ module.exports = {
           id: id
         }
       })
-      const response = await User.findByPk(id)
+      const response = await User.findByPk(id, { paranoid: false })
       endpointResponse({
         res,
         message: 'User deleted successfully',
