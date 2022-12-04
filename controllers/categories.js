@@ -16,7 +16,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving users] - [index - GET]: ${error.message}`
+        `[Error retrieving categories] - [index - GET]: ${error.message}`
       );
       next(httpError);
     }
@@ -36,14 +36,14 @@ module.exports = {
       } else {
         endpointResponse({
           res,
-          message: "Categories retrieved successfully",
+          message: "Category created successfully",
           body: category,
         });
       }
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving users] - [index - GET]: ${error.message}`
+        `[Error creating category] - [index - GET]: ${error.message}`
       );
       next(httpError);
     }
