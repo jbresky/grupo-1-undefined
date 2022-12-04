@@ -22,12 +22,13 @@ module.exports = (sequelize, DataTypes) => {
     avatar: DataTypes.STRING,
     roleId: {type:DataTypes.INTEGER, defaultValue:1},
     deletedAt: {
-      type: DataTypes.STRING
+      type: DataTypes.DATE
     },
   }, {
     sequelize,
     timestamps: true,
     modelName: 'User',
+    paranoid: true,
   });
   return User;
 };
