@@ -44,5 +44,53 @@ module.exports = {
       );
       next(httpError);
     }
+  }),
+  createCategory: catchAsync(async (req, res, next) => {
+    const { name, description } = req.body;
+    try {
+      const [category, created] = await Category.findOrCreate({
+        where: { name },
+        defaults: { 
+          name,
+          description
+        }
+      });
+      if (!created) {
+        throw new ErrorObject("Category already exist", 400);
+      } else {
+        endpointResponse({
+          res,
+          message: "Category created successfully",
+          body: category,
+        });
+      }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error creating category] - [index - GET]: ${error.message}`
+      );
+      next(httpError);
+    }
+  }),
+  getId: catchAsync(async (req, res, next) => {
+    const { id } = req.params
+    try {
+      const response = await Category.findByPk(id)
+      if (response) {
+        endpointResponse({
+          res,
+          message: 'Category retrieved successfully',
+          body: response,
+        })
+      } else {
+        throw new ErrorObject("Can't find the category you're looking for", 400);
+      }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving category] - [index - GET]: ${error.message}`,
+      )
+      next(httpError)
+    }
   })
 }
