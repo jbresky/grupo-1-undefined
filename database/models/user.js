@@ -21,11 +21,18 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     avatar: DataTypes.STRING,
     roleId: {type:DataTypes.INTEGER, defaultValue:1},
+<<<<<<< HEAD
     deletedAt: {
       type: DataTypes.DATE
     },
+=======
+    /* deletedAt: {
+      type: DataTypes.STRING
+    }, */
+>>>>>>> origin2/develop
   }, {
     sequelize,
+    paranoid: true,
     timestamps: true,
     modelName: 'User',
     paranoid: true,
