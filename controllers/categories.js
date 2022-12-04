@@ -7,10 +7,10 @@ const { ErrorObject } = require("../helpers/error.js");
 module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
-      const response = await Category.count();
+      const response = await Category.findAll();
       endpointResponse({
         res,
-        message: "Categories total retrieved successfully",
+        message: "Categories retrieved successfully",
         body: response,
       });
     } catch (error) {
