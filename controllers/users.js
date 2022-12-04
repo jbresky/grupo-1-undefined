@@ -47,6 +47,32 @@ module.exports = {
       next(httpError)
     }
   }),
+  deleteUser: catchAsync(async (req, res, next) => {
+    const { id } = req.params
+    try {
+      const response = await User.findByPk(id)
+      if (response) {
+        await User.destroy({
+          where: {
+            id: id
+          }
+        })
+        endpointResponse({
+          res,
+          message: 'User deleted successfully',
+          body: response,
+        })
+      }else {
+        throw new ErrorObject("Can't find the user you're looking for", 400);
+      }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error deleting user] - [index - GET]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
   create: catchAsync(async(req,res,next)=>{
     try {
       const {
