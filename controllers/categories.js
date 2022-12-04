@@ -20,5 +20,32 @@ module.exports = {
       );
       next(httpError);
     }
+  }),
+  createCategory: catchAsync(async (req, res, next) => {
+    const { name, description } = req.body;
+    try {
+      const [category, created] = await Category.findOrCreate({
+        where: { name },
+        defaults: { 
+          name,
+          description
+        }
+      });
+      if (!created) {
+        throw new ErrorObject("Category already exist", 400);
+      } else {
+        endpointResponse({
+          res,
+          message: "Categories retrieved successfully",
+          body: category,
+        });
+      }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving users] - [index - GET]: ${error.message}`
+      );
+      next(httpError);
+    }
   })
 }
