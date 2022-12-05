@@ -1,23 +1,19 @@
-"use strict";
+const { Role } = require("../models");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    let roles = [
-      {
+    return Promise.all([
+      Role.create({
+        id: 1,
         name: "Usuario",
         description: "Usuarios que consumen el sitio",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
+      }),
+      Role.create({
+        id: 2,
         name: "Administrador",
         description: "Usuarios que administran el sitio",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
-
-    await queryInterface.bulkInsert("Roles", roles, {});
+      }),
+    ]);
   },
 
   down: async (queryInterface, Sequelize) => {
