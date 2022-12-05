@@ -21,13 +21,15 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     avatar: DataTypes.STRING,
     roleId: {type:DataTypes.INTEGER, defaultValue:1},
-    deletedAt: {
+    /* deletedAt: {
       type: DataTypes.STRING
-    },
+    }, */
   }, {
     sequelize,
+    paranoid: true,
     timestamps: true,
     modelName: 'User',
+    paranoid: true,
   });
   return User;
 };

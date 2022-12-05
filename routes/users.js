@@ -3,7 +3,8 @@ const {
    get,
    create,
    editUser,
-   getId
+   getId,
+   deleteUser
 } = require('../controllers/users')
 
 const { schemaValidator } = require('../middlewares/schemaValidator');
@@ -15,6 +16,6 @@ router.get('/', get)
 router.post('/', schemaValidator(registration), create)
 router.put('/:id',schemaValidator(registration), editUser)
 router.get('/:id', getId)
-
+router.delete('/:id', deleteUser)
 
 module.exports = router
