@@ -4,8 +4,7 @@ const {
    create,
    editUser,
    getId,
-   deleteUser,
-   loginUser
+   deleteUser
 } = require('../controllers/users')
 
 const { schemaValidator } = require('../middlewares/schemaValidator');
@@ -18,6 +17,5 @@ router.post('/', schemaValidator(registration), create)
 router.put('/:id',schemaValidator(registration), editUser)
 router.get('/:id', getId)
 router.delete('/:id', deleteUser)
-router.post('/login', loginUser)
 
 module.exports = router
