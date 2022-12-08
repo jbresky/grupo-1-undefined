@@ -3,6 +3,7 @@ const usersRouter = require('./users')
 const transactionsRouter = require('./transactions')
 const categoriesRouter = require('./categories')
 const authRouter = require('./auth')
+const uploadRouter = require('./upload')
 
 const router = express.Router()
 
@@ -11,5 +12,6 @@ router.use('/users', usersRouter)
 router.use('/transactions', transactionsRouter)
 router.use('/categories', categoriesRouter)
 router.use('/auth', authRouter)
+router.use('/upload', uploadRouter)
 
 module.exports = router
