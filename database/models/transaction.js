@@ -11,24 +11,29 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Transaction.belongsTo(models.User, { foreignKey: 'userId' });
-      Transaction.belongsTo(models.Category, { foreignKey: 'categoryId' });
+      Transaction.belongsTo(models.User, {
+        foreignKey: 'userId'
+      });
+      Transaction.belongsTo(models.Category, {
+        foreignKey: 'categoryId'
+      });
     }
-    
+
   };
   Transaction.init({
     description: DataTypes.STRING,
     amount: DataTypes.FLOAT,
-    userId:DataTypes.INTEGER,
-    categoryId:DataTypes.INTEGER , 
-    date: DataTypes.DATE,    
-    deletedAt: {
-      type: DataTypes.STRING
-    },
+    userId: DataTypes.INTEGER,
+    categoryId: DataTypes.INTEGER,
+    date: DataTypes.DATE,
+    // deletedAt: {
+    //   type: DataTypes.DATE
+    // },
   }, {
     sequelize,
-    timestamps: true,
+    timestamps: false,
     modelName: 'Transaction',
+    paranoid: true,
   });
   return Transaction;
 };

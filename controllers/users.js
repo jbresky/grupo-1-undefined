@@ -1,17 +1,21 @@
 const createHttpError = require("http-errors");
+const { User } = require("../database/models");
 const { endpointResponse } = require("../helpers/success");
 const { catchAsync } = require("../helpers/catchAsync");
 const { ErrorObject } = require("../helpers/error.js");
-const { getUsers, getOneUser, createUser, updateUser } = require('../services/users')
+const bcrypt = require("bcryptjs");
+const { generateJwt } = require("../helpers/generate-JWT.js");
+
+
 
 // example of a controller. First call the service, then build the controller method
 module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
-      const response = await getUsers();
+      const response = await User.findAll();
       endpointResponse({
         res,
-        message: 'User retrieved successfully',
+        message: "Users retrieved successfully",
         body: response,
       });
     } catch (error) {
@@ -20,34 +24,91 @@ module.exports = {
         `[Error retrieving users] - [index - GET]: ${error.message}`
       );
       next(httpError);
-    }}),
-
+    }
+  }),
   getId: catchAsync(async (req, res, next) => {
     const { id } = req.params
     try {
-      const response = await getOneUser(id)
-      endpointResponse({
-        res,
-        message: 'User retrieved successfully',
-        body: response,
-      });
+      const response = await User.findByPk(id)
+      if (response) {
+        endpointResponse({
+          res,
+          message: 'User retrieved successfully',
+          body: response,
+        })
+      } else {
+        throw new ErrorObject("Can't find the user you're looking for", 404);
+      }
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
         `[Error retrieving user] - [index - GET]: ${error.message}`,
       )
       next(httpError)
-    }}),
-
-  create: catchAsync(async (req, res, next) => {
+    }
+  }),
+  deleteUser: catchAsync(async (req, res, next) => {
+    const { id } = req.params
     try {
-      const { user, created } = await createUser({ email: req.body.email }, ...req.body);
-      if (!created) {
-        throw new ErrorObject("Email already exists", 403);
-      } else {
+      const response = await User.findByPk(id)
+      if (response) {
+        await User.destroy({
+          where: {
+            id: id
+          }
+        })
         endpointResponse({
           res,
-          message: "The user has been created",
+          message: 'User deleted successfully',
+          body: response,
+        })
+      }else {
+        throw new ErrorObject("Can't find the user you're looking for", 400);
+      }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error deleting user] - [index - GET]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+  create: catchAsync(async(req,res,next)=>{
+    try {
+      const {
+        firstName,
+        lastName,
+        email,
+        password,
+        avatar,
+        roleId,
+        deletedAt,
+      } = req.body;
+      const hashPasword = bcrypt.hashSync(password, 8);
+
+
+      
+
+      const [user, created] = await User.findOrCreate({
+        where: { email },
+        defaults: {
+          firstName,
+          lastName,
+          email,
+          password: hashPasword,
+          avatar,
+          roleId,
+          deletedAt,
+        },
+      });
+      //verificar si ya existe el usuario
+      if (!created) {
+        throw new ErrorObject("Email already exist", 400);
+      } else {
+        const token = await generateJwt(user.id);
+        endpointResponse({
+          res,
+          message: "User created successfully",
           body: { user, token },
         });
       }
@@ -57,25 +118,47 @@ module.exports = {
         `[Error retrieving users] - [index - POST]: ${error.message}`
       );
       next(httpError);
-    }}),
-    
-  editUser: catchAsync(async (req, res, next) => {
-    try {
-      const userUpdated = updateUser({ id: req.user.id }, ...req.body)
-      if (!userUpdated) {
-        throw new ErrorObject("User do not exists", 403);
-      } else {
+      // res.status(error.statusCode).send(error.message)
+    }
+  }),
+  editUser:catchAsync(
+    async (req, res, next) => {
+      try {
+        const { id } = req.params;
+        const user = await User.findByPk(id);
+        if (user === null) throw new ErrorObject("user does not exist", 404);
+        const {
+          firstName,
+          lastName,
+          email,
+          password,
+          avatar,
+          roleId,
+          deletedAt,
+        } = req.body;
+        user.set({
+          firstName,
+          lastName,
+          email,
+          password: bcrypt.hashSync(password, 8),
+          avatar,
+          roleId,
+          deletedAt,
+        });
+        const response = await user.save();
         endpointResponse({
           res,
-          message: "The user has been updated",
-          body: userUpdated,
+          message: `${response.email} updated succesfully`,
+          body: response,
         });
+        
+      } catch (error) {
+        const httpError = createHttpError(
+          error.statusCode,
+          `[Error retrieving users] - [index - PUT]: ${error.message}`
+        );
+        next(httpError);
       }
-    } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        `[Error retrieving users] - [index - PUT]: ${error.message}`
-      );
-      next(httpError);
-    }})
+    }
+  ),
 };
