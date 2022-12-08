@@ -40,3 +40,11 @@ exports.registration = {
         // normalizeEmail: true,
     },
 };
+
+exports.edit = {
+    id: {
+        exists: {
+            errorMessage: "Id is required"
+        },
+    },
+};
