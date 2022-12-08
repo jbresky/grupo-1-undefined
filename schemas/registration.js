@@ -1,4 +1,9 @@
 exports.registration = {
+    id: {
+        exists: {
+            errorMessage: "Id is required"
+        },
+    },
     firstName: {
         exists: {
             errorMessage: "First Name is required",
