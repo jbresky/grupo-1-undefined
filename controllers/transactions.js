@@ -112,14 +112,14 @@ module.exports = {
     }
   }),
   edit: catchAsync(async (req, res, next) => {
+    const { id } = req.params
+    const transaction = await Transaction.findByPk(id);
     try {
       const {
-        id,
         userId,
         categoryId,
       } = req.body;
-
-      const transaction = await Transaction.findByPk(id);
+// esto es necesario? o puedo crear un middleware?
       if (!transaction) {
         const httpError = createHttpError(
           404,
@@ -179,9 +179,7 @@ module.exports = {
   }),
   delete: catchAsync(async (req, res, next) => {
     try {
-      const {
-        id,
-      } = req.body;
+      const { id } = req.params;
 
       const transaction = await Transaction.findByPk(id);
       if (!transaction) {
