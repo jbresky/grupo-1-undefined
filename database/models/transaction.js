@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     categoryId: DataTypes.INTEGER,
     date: DataTypes.DATE,
-    deletedAt: {
-      type: DataTypes.DATE
-    },
+    // deletedAt: {
+    //   type: DataTypes.DATE
+    // },
   }, {
     sequelize,
     timestamps: true,

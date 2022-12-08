@@ -29,7 +29,7 @@ exports.registration = {
             errorMessage: "Password should be a string"
         },
         isStrongPassword: {
-            errorMessage: "Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, and one number",
+            errorMessage: "Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
         },
     },
     email: {
@@ -38,5 +38,13 @@ exports.registration = {
             errorMessage: "Please provide a valid email"
         },
         // normalizeEmail: true,
+    },
+};
+
+exports.edit = {
+    id: {
+        exists: {
+            errorMessage: "Id is required"
+        },
     },
 };
