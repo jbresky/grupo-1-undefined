@@ -19,7 +19,7 @@ const router = express.Router();
 router.get('/', listAll);
 router.get('/:id', listOne);
 router.post('/', schemaValidator(createTransaction), create);
-router.put('/', schemaValidator(editTransaction), edit);
-router.delete('/', schemaValidator(editTransaction), _delete);
+router.put('/:id', schemaValidator(editTransaction), edit);
+router.delete('/:id', schemaValidator(editTransaction), _delete);
 
 module.exports = router;
