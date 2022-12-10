@@ -26,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     paranoid: true,
     timestamps: false,
     modelName: 'Category',
-    paranoid: true,
   });
   return Category;
 };
