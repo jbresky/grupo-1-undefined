@@ -18,13 +18,13 @@ module.exports = (sequelize, DataTypes) => {
   Category.init({
     name: DataTypes.STRING,
     description: DataTypes.STRING,
-    // deletedAt: {
-    //   type: DataTypes.DATE
-    // },
+    deletedAt: {
+      type: DataTypes.DATE
+    },
   }, {
     sequelize,
     paranoid: true,
-    timestamps: false,
+    timestamps: true,
     modelName: 'Category',
   });
   return Category;
