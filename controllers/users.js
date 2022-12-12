@@ -103,13 +103,18 @@ module.exports = {
       });
       //verificar si ya existe el usuario
       if (!created) {
-        throw new ErrorObject("Email already exist", 400);
+        // throw new ErrorObject("Email already exist", 400);
+        endpointResponse({
+          res,
+          message: "Email already exist",
+          body: { ok:false },
+        });
       } else {
         const token = await generateJwt(user.id);
         endpointResponse({
           res,
           message: "User created successfully",
-          body: { user, token },
+          body: { user, token, ok:true },
         });
       }
     } catch (error) {
