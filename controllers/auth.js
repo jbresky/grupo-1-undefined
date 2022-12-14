@@ -5,6 +5,24 @@ const { catchAsync } = require("../helpers/catchAsync");
 const bcrypt = require("bcryptjs");
 
 module.exports = {
+  me: catchAsync(async (req, res, next) => {
+    try {
+      let user = await User.findByPk(req.user.id);
+      user = user.dataValues;
+      const { ...rest } = user;
+      endpointResponse({
+        res,
+        message: 'Profile data',
+        body: {
+          ...rest
+        }
+      });
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, `[Error creating user] - [index - GET]: ${error.message}`);
+      next(httpError);
+    }
+  }),
+
   loginUser: catchAsync(async (req, res, next) => {
     const { email, password } = req.body
     const userInfo = await User.findOne({where: { email: email }})
