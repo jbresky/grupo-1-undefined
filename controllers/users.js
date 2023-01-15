@@ -4,11 +4,8 @@ const { endpointResponse } = require("../helpers/success");
 const { catchAsync } = require("../helpers/catchAsync");
 const { ErrorObject } = require("../helpers/error.js");
 const bcrypt = require("bcryptjs");
-const { generateJwt } = require("../helpers/generate-JWT.js");
+const { generateJwt, signToken } = require("../helpers/generate-JWT.js");
 
-
-
-// example of a controller. First call the service, then build the controller method
 module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
@@ -62,7 +59,7 @@ module.exports = {
           message: 'User deleted successfully',
           body: response,
         })
-      }else {
+      } else {
         throw new ErrorObject("Can't find the user you're looking for", 400);
       }
     } catch (error) {
@@ -73,7 +70,7 @@ module.exports = {
       next(httpError)
     }
   }),
-  create: catchAsync(async(req,res,next)=>{
+  create: catchAsync(async (req, res, next) => {
     try {
       const {
         firstName,
@@ -84,10 +81,8 @@ module.exports = {
         roleId,
         deletedAt,
       } = req.body;
+
       const hashPasword = bcrypt.hashSync(password, 8);
-
-
-      
 
       const [user, created] = await User.findOrCreate({
         where: { email },
@@ -103,13 +98,18 @@ module.exports = {
       });
       //verificar si ya existe el usuario
       if (!created) {
-        throw new ErrorObject("Email already exist", 400);
+        // throw new ErrorObject("Email already exist", 400);
+        endpointResponse({
+          res,
+          message: "Email already exist",
+          body: { ok: false },
+        });
       } else {
-        const token = await generateJwt(user.id);
+        const token = signToken(user.id);
         endpointResponse({
           res,
           message: "User created successfully",
-          body: { user, token },
+          body: { user, token, ok: true },
         });
       }
     } catch (error) {
@@ -121,7 +121,7 @@ module.exports = {
       // res.status(error.statusCode).send(error.message)
     }
   }),
-  editUser:catchAsync(
+  editUser: catchAsync(
     async (req, res, next) => {
       try {
         const { id } = req.params;
@@ -151,7 +151,7 @@ module.exports = {
           message: `${response.email} updated succesfully`,
           body: response,
         });
-        
+
       } catch (error) {
         const httpError = createHttpError(
           error.statusCode,

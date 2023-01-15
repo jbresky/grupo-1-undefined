@@ -15,20 +15,20 @@ module.exports = {
         type: Sequelize.STRING
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       avatar: {
         type: Sequelize.STRING
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       roleId: {
         type: Sequelize.INTEGER,
-        references:{
-          model:'Roles',
-          key:'id'
+        defaultValue: 1,
+        references: {
+          model: 'Roles',
+          key: 'id'
         },
       },
       createdAt: {
@@ -36,11 +36,9 @@ module.exports = {
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       },
       deletedAt: {
-        allowNull:true,
         type: Sequelize.DATE
       }
     });

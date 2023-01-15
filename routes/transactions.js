@@ -1,5 +1,6 @@
 const express = require('express')
 const {
+   get,
    listAll,
    listOne,
    create,
@@ -9,6 +10,7 @@ const {
 const {
    schemaValidator
 } = require('../middlewares/schemaValidator');
+const { verifyToken } = require('../middlewares/token');
 const {
    createTransaction,
    editTransaction
@@ -16,7 +18,8 @@ const {
 
 const router = express.Router();
 
-router.get('/', listAll);
+router.get('/', verifyToken, get);
+router.get('/all', listAll);
 router.get('/:id', listOne);
 router.post('/', schemaValidator(createTransaction), create);
 router.put('/:id', schemaValidator(editTransaction), edit);
