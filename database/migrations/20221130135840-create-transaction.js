@@ -1,14 +1,17 @@
 'use strict';
 
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('transactions', {
+    await queryInterface.createTable('Transactions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      type: {
+        allowNull: false,
+        type: Sequelize.ENUM(["Ingreso", "Egreso"]),
       },
       description: {
         type: Sequelize.STRING,
@@ -16,50 +19,45 @@ module.exports = {
       },
       amount: {
         allowNull: false,
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
       },
       userId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: {
-            tableName: "users",
-
-          },
-          key: "id",
+            model: 'Users',
+            key: 'id'
         },
-        allowNull: false,
       },
-
+      toUserId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        }
+      },
       categoryId: {
+        allowNull: true,
         type: Sequelize.INTEGER,
         references: {
-          model: {
-            tableName: "categories",
-
-          },
-          key: "id",
+            model: 'Categories',
+            key: 'id'
         },
-        allowNull: false,
-
       },
-      date: {
+      createdAt: {
+        allowNull: false,
         type: Sequelize.DATE,
-        allowNull: false
+      },
+      updatedAt: {
+        type: Sequelize.DATE
       },
       deletedAt: {
         type: Sequelize.DATE,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('transactions');
+    await queryInterface.dropTable('Transactions');
   }
 };
